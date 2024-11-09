@@ -9,7 +9,10 @@
     "test": "pnpm run build && pnpm run run"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Haruka Takahashi",
+    "email": "contact@shiroko.me"
+  },
   "license": "ISC",
   "dependencies": {
     "@discord/intl": "^0.13.0",
