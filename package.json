@@ -1,10 +1,12 @@
 {
-  "name": "miyako",
+  "name": "@nakoyasha/miyako",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord experiments / strings / build scraper for datamining",
   "main": "index.js",
   "scripts": {
-    "test": "node ./scripts/index.mjs && node dist/testParse.js"
+    "build": "node ./scripts/index.mjs",
+    "run": "node dist/testParse.js",
+    "test": "pnpm run build && pnpm run run"
   },
   "keywords": [],
   "author": "",
