@@ -60,7 +60,6 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
 
   for (let match of scriptMatches) {
     const url = match[0];
-    console.log(url);
 
     const script: DiscordScript = {
       type: "initial",
