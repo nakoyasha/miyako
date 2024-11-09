@@ -1,6 +1,5 @@
 import { extractChunksFromChunkloader } from "./extract/chunksExtractor";
-import { DiscordBranch } from "./commonEnums";
-import { JS_HTML_REGEX } from "./constants";
+import { DiscordBranch, JS_HTML_REGEX } from "./constants";
 import { DiscordScrapeResult, DiscordScript, DiscordScriptTag } from "./types";
 
 import { fetch, setGlobalDispatcher, Agent } from "undici";

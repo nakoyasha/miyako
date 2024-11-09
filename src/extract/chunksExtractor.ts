@@ -1,7 +1,7 @@
 import { simple } from "acorn-walk";
 import { parse } from "acorn";
 import { DiscordChunk, DiscordScript } from "types";
-import { DiscordBranch } from "commonEnums";
+import { DiscordBranch } from "../constants";
 
 function getChunkObject(node, type: "js" | "css") {
   const argument = node.argument;

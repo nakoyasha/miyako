@@ -1,4 +1,4 @@
-import { DiscordBranch } from "commonEnums";
+import { DiscordBranch } from "./constants";
 
 export enum DiscordScriptTag {
   //  Language File
