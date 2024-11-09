@@ -8,6 +8,9 @@ import { extractStrings, isLanguageFile } from "./extract/stringsExtractor";
 // otherwise fetch dies while fetching too many files
 setGlobalDispatcher(new Agent({ connect: { timeout: 60_000 } }));
 
+export * from "./constants";
+export * from "./types";
+
 export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   const response = await fetch(
     overrideUrl != undefined ? overrideUrl : new URL("/app", branch)
