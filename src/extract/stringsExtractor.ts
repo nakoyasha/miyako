@@ -5,7 +5,6 @@ import { DiscordString } from "../types";
 // i hate this
 export function isLanguageFile(source: string) {
   if (source.includes("o.default=JSON.parse(")) {
-    console.log(source);
     return true;
   }
 

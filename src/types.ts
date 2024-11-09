@@ -31,5 +31,6 @@ export type DiscordScrapeResult = {
   hash: string;
   id: string;
   experiments: [];
+  strings: DiscordString[];
   scripts: DiscordScript[];
 };

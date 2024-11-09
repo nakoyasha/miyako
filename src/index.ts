@@ -45,10 +45,12 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
     buildDate: new Date(buildDate),
     scripts: [],
     experiments: [],
+    strings: [],
     hash: versionHash,
     id: "",
   };
 
+  console.time("[miyako::timing] Build scrape took");
   console.log(
     "[miyako::main]",
     `Scraping build ${versionHash}, built on ${build.buildDate.toUTCString()}`
@@ -101,7 +103,7 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
       };
 
       const url = branch + "/assets/" + chunk.url;
-      console.log(`Fetching ${url}`);
+      // console.log(`Fetching ${url}`);
 
       try {
         const response = await fetch(url);
@@ -135,18 +137,24 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   );
 
   console.log(
-    `Got i18n: ${languageFiles.length}, starting string extraction..`
+    `[miyako::i18n] Got i18n: ${languageFiles.length}, starting string extraction..`
   );
 
-  for (let i18nChunk of languageFiles) {
-    if (i18nChunk.body != undefined) {
-      const strings = await extractStrings(i18nChunk?.body);
-      console.log(JSON.stringify(strings, null, -1));
-    }
-  }
+  await Promise.all(
+    languageFiles.map(async (i18nChunk) => {
+      if (i18nChunk.body != undefined) {
+        const strings = await extractStrings(i18nChunk?.body);
 
+        build.strings = [...build.strings, ...strings];
+      }
+    })
+  );
+
+  console.timeEnd("[miyako::timing] Build scrape took");
   console.log(
     "[miyako::main]",
-    `Finished scraping build ${versionHash}! Got ${build.scripts.length} scripts`
+    `Finished scraping build ${versionHash}! Got ${build.scripts.length} scripts, ${build.strings.length} strings and ${build.experiments.length} experiments`
   );
+
+  return build;
 }
