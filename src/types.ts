@@ -2,8 +2,8 @@ import { DiscordBranch } from "./constants";
 
 export enum DiscordScriptTag {
   //  Language File
-  i18n,
-  ChunkLoader,
+  i18n = "i18n",
+  ChunkLoader = "chunk_loader",
 }
 
 export type DiscordScript = {
