@@ -129,8 +129,7 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
         tags: [],
       };
 
-      const url = branch + "/assets/" + chunk.url;
-      // console.log(`Fetching ${url}`);
+      const url = branch + chunk.url;
 
       try {
         const response = await fetch(url);

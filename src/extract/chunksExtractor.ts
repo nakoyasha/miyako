@@ -70,7 +70,7 @@ export async function extractChunksFromChunkloader(
               type: "js",
               id: keyValue,
               hash: valueValue,
-              url: `${valueValue}.js`,
+              url: `/assets/${valueValue}.js`,
             });
           }
         }
@@ -90,7 +90,7 @@ export async function extractChunksFromChunkloader(
               type: "css",
               id: keyValue,
               hash: valueValue,
-              url: `${valueValue}.css`,
+              url: `/assets/${valueValue}.css`,
             });
           }
         }
