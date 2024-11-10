@@ -1,5 +1,5 @@
 import { extractChunksFromChunkloader } from "./extract/chunksExtractor";
-import { DiscordBranch, JS_HTML_REGEX } from "./constants";
+import { DiscordBranch, JS_HTML_REGEX, BUILD_NUMBER_REGEX } from "./constants";
 import { DiscordScrapeResult, DiscordScript, DiscordScriptTag } from "./types";
 
 import { fetch, setGlobalDispatcher, Agent } from "undici";
@@ -64,10 +64,20 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
 
   for (let match of scriptMatches) {
     const url = match[0];
+    const path = url.replaceAll('"', "");
+    const response = await fetch(new URL(path, branch));
+
+    if (!response.ok) {
+      console.error(
+        `[miyako::initial_fetch] Failed to fetch ${url} (${response.status} - ${response.statusText})`
+      );
+      return;
+    }
 
     const script: DiscordScript = {
       type: "initial",
-      path: url.replaceAll('"', ""),
+      path: path,
+      body: await response.text(),
       tags: [],
     };
 
@@ -93,8 +103,23 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   const lazyChunks = await extractChunksFromChunkloader(branch, chunkLoader);
 
   if (lazyChunks == undefined) {
-    throw new Error("dangit");
+    console.error(
+      "[miyako::chunks] Failed to extract chunks from the chunkLoader!"
+    );
+    return;
   }
+
+  // get the client number
+  const buildNumberMatches = chunkLoader.body?.match(BUILD_NUMBER_REGEX);
+
+  if (buildNumberMatches == undefined || buildNumberMatches?.length == 0) {
+    console.error(
+      "[miyako::build_num_fetch] FATAL: Failed to fetch the build number!"
+    );
+    return;
+  }
+
+  build.id = buildNumberMatches[0];
 
   await Promise.all(
     lazyChunks.map(async (chunk) => {
