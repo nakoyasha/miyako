@@ -25,7 +25,7 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   }
 
   const versionHash = response.headers.get("X-Build-Id");
-  const buildDate = response.headers.get("Date");
+  const buildDate = response.headers.get("Last-Modified");
 
   if (versionHash == undefined) {
     console.error(
