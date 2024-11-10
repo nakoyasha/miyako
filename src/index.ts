@@ -10,6 +10,7 @@ setGlobalDispatcher(new Agent({ connect: { timeout: 60_000 } }));
 
 export * from "./constants";
 export * from "./types";
+export * from "./util/getFormattedBranchName";
 
 export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   const response = await fetch(
