@@ -25,12 +25,24 @@ export type DiscordString = {
   value: string;
 };
 
+export type DiscordExperiment = {
+  kind: "guild" | "user";
+  id: string;
+  label: string;
+  treatments: DiscordExperimentTreatment[];
+};
+
+export type DiscordExperimentTreatment = {
+  id: number;
+  label: string;
+};
+
 export type DiscordScrapeResult = {
   branch: DiscordBranch;
   buildDate: Date;
   hash: string;
   id: string;
-  experiments: [];
+  experiments: DiscordExperiment[];
   strings: DiscordString[];
   scripts: DiscordScript[];
 };

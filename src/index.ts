@@ -4,6 +4,7 @@ import { DiscordScrapeResult, DiscordScript, DiscordScriptTag } from "./types";
 
 import { fetch, setGlobalDispatcher, Agent } from "undici";
 import { extractStrings, isLanguageFile } from "./extract/stringsExtractor";
+import { extractExperiments } from "./extract/experimentsExtractor";
 
 // otherwise fetch dies while fetching too many files
 setGlobalDispatcher(new Agent({ connect: { timeout: 60_000 } }));
@@ -169,9 +170,28 @@ export async function scrapeApp(branch: DiscordBranch, overrideUrl?: string) {
   await Promise.all(
     languageFiles.map(async (i18nChunk) => {
       if (i18nChunk.body != undefined) {
-        const strings = await extractStrings(i18nChunk?.body);
-
+        const strings = await extractStrings(i18nChunk.body);
         build.strings = [...build.strings, ...strings];
+      }
+    })
+  );
+
+  const scriptChunks = build.scripts.filter((script) => {
+    return script.path.includes(".js");
+  });
+
+  console.log(
+    `[miyako::experiments] Gonna extract experiments from ${scriptChunks.length} chunks..`
+  );
+  await Promise.all(
+    scriptChunks.map(async (chunk) => {
+      if (chunk.body != undefined) {
+        const experiments = await extractExperiments(chunk.body);
+
+        if (experiments.length == 0) {
+          return;
+        }
+        build.experiments = [...build.experiments, ...experiments];
       }
     })
   );

@@ -6,7 +6,7 @@
         "strictNullChecks": true,
         "strictFunctionTypes": true,
         "sourceMap": true,
-        "baseUrl": "src"
+        "baseUrl": "."
     },
     "exclude": [
         "node_modules",
