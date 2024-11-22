@@ -77,6 +77,8 @@ function astToJSValue(
 
 export async function extractExperiments(source: string) {
   const experiments: DiscordExperiment[] = [];
+  const foundExperiments = new Set();
+
   try {
     const ast = parse(source, {
       ecmaVersion: "latest",
@@ -93,6 +95,16 @@ export async function extractExperiments(source: string) {
           const label = getValueFromExpression(properties, "label");
           let treatmentsObject = [];
 
+          if (kind === undefined) {
+            return;
+          }
+          if (id === undefined) {
+            return;
+          }
+          if (label === undefined) {
+            return;
+          }
+
           try {
             treatmentsObject = astToJSValue(treatments.value);
           } catch (err) {
@@ -100,6 +112,12 @@ export async function extractExperiments(source: string) {
               `Could not parse treatments of experiment ${id.value.value}: ${err.message}`
             );
           }
+
+          if (foundExperiments.has(id.value.value)) {
+            return;
+          }
+
+          foundExperiments.add(id.value.value);
 
           experiments.push({
             kind: kind.value.value,
